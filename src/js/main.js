@@ -1,38 +1,57 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Header from './Header';
-import Footer from './Footer';
+import AddItem from './AddItemForm';
+import ItemsList from './ItemsList';
 
-class FirstComponent extends React.Component {
-    constructor() {
-        super();
-        this.name = "Ab";
-        this.state = {
-            name: "Kool guy 2007"
-        }
-        this.changeName = this.changeName.bind(this);
+
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      items: []
     }
-    displayName(name) {
-        return <h1>Hello {name} </h1>;
-    }
-    changeName() {
-        this.setState({name: "name"});
-    }
-    render() {
-        console.log("rendering");
-        return (<div>
-            <Header username={this.state.name} />
-            <button onClick={this.changeName}>Change Name</button>
-            <p>Hi again {this.name}</p> 
-            <Footer />
-        </div>);
-    }
+    this.add = this.add.bind(this);
+    this.upVote = this.upVote.bind(this);
+    this.downVote = this.downVote.bind(this);
+  }
+  add(link) {
+    const obj = {id: this.state.items.length+1, votes: 0, link: link};
+    let items = this.state.items;
+    items.push(obj);
+    this.setState({items: items}, () => console.log(this.state));
+  }
+  upVote(id) {
+    const items = this.state.items;
+    const updatedItems = items.map((item) => {
+      if(item.id == id) {
+        item.votes = item.votes+1;
+        return item;
+      } else {
+        return item;
+      }
+    })
+    this.setState({items: updatedItems});
+  }
+  downVote(id) {
+    const items = this.state.items;
+    const updatedItems = items.map((item) => {
+      if(item.id == id) {
+        item.votes = item.votes-1;
+        return item;
+      } else {
+        return item;
+      }
+    })
+    this.setState({items: updatedItems});
+  }
+  render() {
+    return (<div className="container">
+        <AddItem onAddItem={this.add} />
+        <br/>
+        <ItemsList items={this.state.items} up={this.upVote} down={this.downVote} />
+      </div>);
+  }
 }
 
-ReactDOM.render(<FirstComponent />, document.getElementById('app'));
-
-const set = new Set(['books', 'pens', 'paper', 'books']);
-set.forEach((val) => {
-    console.log(val);
-})
+ReactDOM.render( < App / > , document.getElementById('app'));
