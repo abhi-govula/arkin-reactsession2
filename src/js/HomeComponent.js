@@ -1,6 +1,7 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
+import * as actions from './actions/index';
 
 class Home extends React.Component {
     constructor() {
@@ -11,7 +12,7 @@ class Home extends React.Component {
         console.log("Constructor called");
         this.logData = this.logData.bind(this);
         this.setData = this.setData.bind(this);
-        this.variables = ["name1", "name2"]
+        this.variables = ["name1", "name2"];
     }
 
     componentWillMount() {
@@ -19,6 +20,7 @@ class Home extends React.Component {
     }
     componentDidMount() {
         console.log("Component did mount called");
+        this.props.actions.getJokes();
     }
     componentWillUnmount() {
         console.log("Component will unmount called");
@@ -29,7 +31,7 @@ class Home extends React.Component {
         //     console.log(this.state.name);
         // });
         // console.log(this);
-        this.props.addTodo(this.state.name);
+        this.props.actions.addTodo(this.state.name);
     }
     formSubmit(e) {
         e.preventDefault();
@@ -44,7 +46,7 @@ class Home extends React.Component {
         const todos = this.props.componentTodos.map((todo) => <div key={todo.id}><p>{todo.name}</p><p>{todo.completed}</p></div>)  
         return (<div>
             {this.variables}
-            <h1>This is home</h1>
+            <h1 className="red">This is home</h1>
             <input type="text" name="name" value={this.state.name} onChange={this.setData} />
             <button onClick={this.logData}>Add Todo</button>
 
@@ -61,7 +63,7 @@ const mapStateToProps = function(state) {
 }
 const mapDispatchToProps = function(dispatch) {
     return {
-        addTodo: (todo) => dispatch({type: 'ADD_TODO', value: todo})
+        actions: bindActionCreators(actions, dispatch),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

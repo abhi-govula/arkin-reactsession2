@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
+import store from './store';
 import TodosReducer from './reducers/TodosReducer';
 
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
@@ -11,12 +11,6 @@ import Home from './HomeComponent';
 import About from './AboutComponent';
 
 
-const rootReducer = combineReducers({
-  todos: TodosReducer,
-});
-
-
-const store = createStore(rootReducer );
 store.dispatch({type: 'ADD_TODO', value: 'New Todo'});
 store.dispatch({type: 'ADD_TODO', value: 'Second Todo'});
 store.dispatch({type: 'ADD_TODO', value: 'Third Todo'});
